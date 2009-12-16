@@ -9,6 +9,7 @@ Dependencies not included:
 * ruby json (http://flori.github.com/json/)
 * compojure (http://github.com/weavejester/compojure)
 * clutch (http://github.com/tashafa/clutch/)
+* clojure-json (http://github.com/danlarkin/clojure-json)
 
 Also you need a config file "config.json" at the top level that looks like
 {
