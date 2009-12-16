@@ -12,7 +12,7 @@
   (with-db db
 		(let [rows (-> (get-view "couch" :poets {:group true
 							 :group_level 1}) :rows)]
-		  (html [:ul {:id "home" :title "Pocket Poet" :selected "true"}
+		  (html [:ul {:id "home" :title "Poeticc" :selected "true"}
 			 (reduce html (map (fn [row]
 					     [:li [:a
 						   {:href (str "/poet/" (-> row :key) ".html") }
