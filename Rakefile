@@ -14,8 +14,16 @@ namespace :deploy do
   task :ui do
     info = JSON.parse(File.read('config.json'))
     to_path = "#{info['admin']}@#{info['prod']['couch']['host']}:/var/poeticc/app"
-    tmp_dir = "/tmp/sammy"
+    tmp_dir = "/tmp/poeticcapp"
 
-    puts "copying things to " + to_path
+    `rm -rf #{tmp_dir}` if File.exists? tmp_dir
+    `mkdir #{tmp_dir}`
+
+    `cp -R webapp/* #{tmp_dir}`
+
+    File.open("#{tmp_dir}/config.json", 'w') { |file| file.write(JSON.generate(info['prod']))}
+
+    `scp -r #{tmp_dir}/* #{to_path}`
+    
   end
 end
