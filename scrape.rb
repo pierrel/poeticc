@@ -9,7 +9,7 @@ require 'logger'
 @base_url = "http://en.wikisource.org"
 @poem_link_regex = /^\/wiki\/[A-Za-z0-1_():]+$/
 @couch = JSON.parse(File.read('config.json'))['couchdb']
-@log = Logger.new "/var/pocketpoet/scrape.log", "daily"
+@log = Logger.new "/var/poeticc/log/scrape.log", "daily"
 
 def scrape_poem_page(url)
   sleep 0.05 # so we don't overload the source
