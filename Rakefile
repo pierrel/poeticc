@@ -13,13 +13,14 @@ namespace :deploy do
   desc 'pushes the ui part of the application'
   task :ui do
     info = JSON.parse(File.read('config.json'))
-    to_path = "#{info['admin']}@#{info['prod']['couch']['host']}:/var/poeticc/app"
+    to_path = "#{info['admin']}@#{info['prod']['couch']['host']}:/var/poeticc"
     tmp_dir = "/tmp/poeticcapp"
 
     `rm -rf #{tmp_dir}` if File.exists? tmp_dir
     `mkdir #{tmp_dir}`
+    `mkdir #{tmp_dir}/app`
 
-    `cp -R webapp/* #{tmp_dir}`
+    `cp -R webapp/* #{tmp_dir}/app`
 
     File.open("#{tmp_dir}/config.json", 'w') { |file| file.write(JSON.generate(info['prod']))}
 
