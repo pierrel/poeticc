@@ -1,17 +1,16 @@
 A web app to be used on the iphone to easily browse wikisource poetry
 
 Dependencies not included:
-* couchdb
-* couchapp
-* ruby
-* hpricot
-* rest_client
-* ruby json
-* compojure
-* clutch
+* couchdb (http://couchdb.apache.org/)
+* couchapp (http://wiki.github.com/jchris/couchapp/manual)
+* ruby (http://www.ruby-lang.org/)
+* hpricot (http://wiki.github.com/hpricot/hpricot)
+* rest_client (http://rest-client.heroku.com/rdoc/)
+* ruby json (http://flori.github.com/json/)
+* compojure (http://github.com/weavejester/compojure)
+* clutch (http://github.com/tashafa/clutch/)
 
 Also you need a config file "config.json" at the top level that looks like
 {
-	"couchdb": "http://username:password@path/to/couch/db",
-	""
+	"couchdb": "http://username:password@path/to/couch/db"
 }
