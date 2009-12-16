@@ -1,11 +1,11 @@
-(ns pocketpoet
+(ns poeticc
   (:use compojure)
-  (:use com.ashafa.clutch))
+  (:use com.ashafa.clutch)
+  (:require [org.danlarkin.json :as json]))
 
+;; set up db definition
 (def db
-     {:name "poems"
-      :host "174.143.156.7"})  
-
+     (-> (json/decode-from-str (slurp "../config.json")) :couch))
 
 (defn main-list
   []
