@@ -28,4 +28,8 @@ namespace :deploy do
     `scp -r #{tmp_dir}/* #{to_path}`
     
   end
+
+  desc 'pushes both the couch app and the ui'
+  task :all => [:couch, :ui] do
+  end
 end
