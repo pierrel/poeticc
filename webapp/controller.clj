@@ -7,6 +7,15 @@
 (def db
      (-> (json/decode-from-str (slurp "../config.json")) :couch))
 
+;; Some helper functions
+(defn alpha-split
+     "splits the sequence into sequences in which the first letter of each sequence is a particular letter
+      for example (andy brandy blandy candy) -> ((andy) (brandy blandy) (candy))"
+     [rows row-key]
+     (let [letters '("A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z")]
+       (map ((fn [rows row-key] 
+	       (fn [letter] (filter (fn [row] (.matches (-> row row-key) (str "^" letter ".*"))) rows))) rows row-key) letters)))
+
 (defn main-list
   []
   (with-db db
@@ -30,7 +39,8 @@
 					      (str (-> row :value))]])
 				      rows))]))))
 
-(defroutes my-app
+;; my routes
+(defroutes app
   (GET "/*" 
     (or (serve-file (params :*)) :next))
 
@@ -58,5 +68,5 @@
 			 [:div {:id "author"} (str (-> doc :author))]])))))
 
 (run-server {:port 3000}
-	    "/*" (servlet my-app))
+	    "/*" (servlet app))
 
