@@ -5,10 +5,13 @@ require 'json'
 require 'rest_client'
 require 'logger'
 
+info = JSON.parse(File.read('config.json'))['couch']
+
+
 @starting_url = "http://en.wikisource.org/wiki/Category:Poems"
 @base_url = "http://en.wikisource.org"
 @poem_link_regex = /^\/wiki\/[A-Za-z0-1_():]+$/
-@couch = JSON.parse(File.read('config.json'))['couchdb']
+@couch = "http://#{info['username']}:#{info['password']}@#{info['host']}:#{info['port']}/#{info['name']}"
 @log = Logger.new "/var/poeticc/log/scrape.log", "daily"
 
 def scrape_poem_page(url)
