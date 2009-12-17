@@ -25,12 +25,13 @@
 		      [:li (inside-list-fn row)]) rows)))
 
 (defn html-list-part
-  "converts the rows into a partition of a list"
+  "converts the rows into a partition of a list "
   [inside-list-fn rows part-name]
   (html [:li {:class "group"} part-name]
 	(html-list-items inside-list-fn rows)))
 
 (defn main-list
+  "Generates the list of all poets, separated by first letter of their last name, with the count of works in parens"
   []
   (with-db db
 		(let [rows ((get-view "couch" :poets {:group true
@@ -45,6 +46,7 @@
 							       (str (first ((first rows-part) :key)))))) (alpha-split rows :key)))]))))
 
 (defn poet-list
+  "Generates the list of works for the poet with name poet-name"
   [poet-name]
   (with-db db
 	   (let [rows (-> (get-view "couch" :poets {:key (.replace poet-name " " "%20")
