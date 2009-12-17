@@ -23,6 +23,7 @@ namespace :deploy do
     `cp -R webapp/* #{tmp_dir}/app`
 
     File.open("#{tmp_dir}/config.json", 'w') { |file| file.write(JSON.generate(info['prod']))}
+    `cp scrape.rb #{tmp_dir}`
 
     `scp -r #{tmp_dir}/* #{to_path}`
     
