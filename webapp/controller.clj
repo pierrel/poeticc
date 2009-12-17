@@ -10,22 +10,39 @@
 ;; Some helper functions
 (defn alpha-split
      "splits the sequence into sequences in which the first letter of each sequence is a particular letter
-      for example (andy brandy blandy candy) -> ((andy) (brandy blandy) (candy))"
+      for example (andy brandy blandy candy) -> ((andy) (brandy blandy) (candy) () () ...)"
      [rows row-key]
      (let [letters '("A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z")]
+       ; the fn is a closure that persists the 'rows' and 'row-key' to the actual map function
        (map ((fn [rows row-key] 
-	       (fn [letter] (filter (fn [row] (.matches (-> row row-key) (str "^" letter ".*"))) rows))) rows row-key) letters)))
+	       (fn [letter] (filter (fn [row] (.matches (row row-key) (str "^" letter ".*"))) rows))) rows row-key) letters)))
+
+(defn html-list-items
+  "converts the rows into and html list
+   inside-list-fn takes a row and converts it into whatever element should be inside the list element"
+  [inside-list-fn rows]
+  (reduce html (map (fn [row]
+		      [:li (inside-list-fn row)]) rows)))
+
+(defn html-list-part
+  "converts the rows into a partition of a list"
+  [inside-list-fn rows part-name]
+  (html [:li {:class "group"} part-name]
+	(html-list-items inside-list-fn rows)))
 
 (defn main-list
   []
   (with-db db
-		(let [rows (-> (get-view "couch" :poets {:group true
+		(let [rows ((get-view "couch" :poets {:group true
 							 :group_level 1}) :rows)]
 		  (html [:ul {:id "home" :title "Poeticc" :selected "true"}
-			 (reduce html (map (fn [row]
-					     [:li [:a
-						   {:href (str "/poet/" (-> row :key) ".html") }
-						   (str (-> row :key) " (" (-> row :value) ")")]]) rows))]))))
+			 (reduce html (map (fn [rows-part] 
+					     (if (not-empty rows-part)
+					       (html-list-part (fn [row] [:a 
+									  {:href (str "/poet/" (row :key) ".html")}
+									  (str (row :key) " (" (row :value) ")")])
+							       rows-part
+							       (str (first ((first rows-part) :key)))))) (alpha-split rows :key)))]))))
 
 (defn poet-list
   [poet-name]
