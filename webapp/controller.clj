@@ -47,8 +47,8 @@
 	      [:a {:id "backButton" :class "button" :href "#"}]]
 	     
 	     (main-list)))
-  (GET "/poet/:name.html"
-       (poet-list (params :name)))
+  (GET #"/poet/([A-Za-z0-9.,% ]+).html"
+       (poet-list ((:route-params request) 0)))
 
   (GET "/poem/:id.html"
        (with-db db
