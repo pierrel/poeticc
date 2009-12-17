@@ -50,14 +50,15 @@
 	   (let [rows (-> (get-view "couch" :poets {:key (.replace poet-name " " "%20")
 						    :reduce false}) :rows)]
 	     (html [:ul {:id "artist" :title poet-name} 
-		    (reduce html (map (fn [row] 
-					[:li [:a 
-					      {:href (str "/poem/" (-> row :id) ".html")} 
-					      (str (-> row :value))]])
-				      rows))]))))
+		    (html-list-items (fn [row] 
+				       [:a 
+					{:href (str "/poem/" (-> row :id) ".html")} 
+					(str (-> row :value))])
+				     rows)]))))
 
 ;; my routes
 (defroutes app
+  ;; so that files within the "public" folder can be accessed
   (GET "/*" 
     (or (serve-file (params :*)) :next))
 
