@@ -35,7 +35,7 @@
   []
   (with-db db
 		(let [rows ((get-view "couch" :poets {:group true
-							 :group_level 1}) :rows)]
+						      :group_level 1}) :rows)]
 		  (html [:ul {:id "home" :title "Poeticc" :selected "true"}
 			 (reduce html (map (fn [rows-part] 
 					     (if (not-empty rows-part)
