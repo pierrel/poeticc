@@ -21,3 +21,23 @@ Also you need a config file "config.json" at the top level that looks like
 		"password": "db-password"
 	}
 }
+
+Optionally you can add a "prod" to the config file, making it look like so
+{
+	"couch": {
+		"host": "localhost",
+		"port": "5984",
+		"name": "poem-db",
+		"username": "db-username",
+		"password": "db-password"
+	},
+	"prod": {
+		"couch": {
+			"host": "localhost",
+			"port": "5984",
+			"name": "poem-db",
+			"username": "db-username",
+			"password": "db-password"
+		}
+	}
+}
