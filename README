@@ -41,3 +41,5 @@ Optionally you can add a "prod" to the config file, making it look like so
 		}
 	}
 }
+
+If you want to track the site using Google Analytics simply drop that snippet given to you when you set up your domain with Google into a file in "webserver/templates/analytics.html"

@@ -20,7 +20,7 @@
 	 "</body>")))
 
 (def analytics
-     (if (info :prod)
+     (if (not (info :prod))
        (slurp "templates/analytics.html")))
 
 ;; Some helper functions
