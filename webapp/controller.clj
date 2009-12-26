@@ -4,8 +4,24 @@
   (:require [org.danlarkin.json :as json]))
 
 ;; set up db definition
+(def info (json/decode-from-str (slurp "../config.json")))
 (def db
-     (-> (json/decode-from-str (slurp "../config.json")) :couch))
+     (info :couch))
+
+;; simple custom view rendering
+(defn layout-body
+  "renders the google analytics tag if in prod"
+  [ & rest]
+  (if (-> (json/decode-from-str (slurp "../config.json")) :prod)
+    (html ,rest)
+    (str "<body>"
+	 (html ,rest)
+	 (slurp "templates/analytics.html")
+	 "</body>")))
+
+(def analytics
+     (if (info :prod)
+       (slurp "templates/analytics.html")))
 
 ;; Some helper functions
 (defn alpha-split
@@ -72,9 +88,11 @@
 	      [:style {:type "text/css" :media "screen"} "@import \"/iui/iui.css\";"]
 	      [:script {:type "application/x-javascript" :src "/iui/iui.js"}]]
 	     
-	     [:div {:class "toolbar"}
-	      [:h1 {:id "pageTitle"}]
-	      [:a {:id "backButton" :class "button" :href "#"}]]
+	     [:body
+	      [:div {:class "toolbar"}
+	       [:h1 {:id "pageTitle"}]
+	       [:a {:id "backButton" :class "button" :href "#"}]]
+	      analytics]
 	     
 	     (main-list)))
   (GET #"/poet/([A-Za-z0-9.,% ]+).html"
