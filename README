@@ -1,4 +1,4 @@
-A web app to be used on the iphone to easily browse wikisource poetry
+A web app to be used on the iphone to easily browse wikisource poetry. A running instance can be found at http://poeti.cc
 
 Dependencies not included:
 * couchdb (http://couchdb.apache.org/ )
