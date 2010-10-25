@@ -83,7 +83,7 @@
   ;; (GET "/*" [] 
   ;;   (or (serve-file (params :*)) :next))
 
-  (GET "/"
+  (GET "/" []
        (html [:head 
 	      [:meta {:name "viewport" :content "width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"}]
 	      [:link {:rel "apple-touch-icon" :href "/iui/iui-logo-touch-icon.png"}]
@@ -98,10 +98,10 @@
 	      analytics]
 	     
 	     (main-list)))
-  (GET #"/poet/([A-Za-z0-9.,% ]+).html"
+  (GET #"/poet/([A-Za-z0-9.,% ]+).html" []
        (poet-list ((:route-params request) 0)))
 
-  (GET "/poem/:id.html"
+  (GET "/poem/:id.html" []
        (with-db db
 		(let [doc (get-document (params :id))]
 		  (html [:div {:title (-> doc :title)}
