@@ -2,4 +2,5 @@
 config.json
 .DS_Store
 *~
+webapp/lib
 webapp/templates
