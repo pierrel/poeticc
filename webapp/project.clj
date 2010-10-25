@@ -6,6 +6,8 @@
    [ring/ring-core "0.2.5"]
    [ring/ring-jetty-adapter "0.2.5"]
    [compojure "0.4.0"]
-   [hiccup "0.2.6"]]
+   [hiccup "0.2.6"]
+   [com.ashafa/clutch "0.2.3-SNAPSHOT"]
+   [org.danlarkin/clojure-json "1.1"]]
   :dev-dependencies
   [[lein-run "1.0.0-SNAPSHOT"]])

@@ -1,5 +1,6 @@
-(ns poeticc
-  (:use compojure)
+(ns poeticc.core
+  (:use compojure.core)
+  (:use hiccup.core)
   (:use com.ashafa.clutch)
   (:require [org.danlarkin.json :as json]))
 
@@ -77,7 +78,7 @@
 ;; my routes
 (defroutes app
   ;; so that files within the "public" folder can be accessed
-  (GET "/*" 
+  (GET "/*" [] 
     (or (serve-file (params :*)) :next))
 
   (GET "/"
