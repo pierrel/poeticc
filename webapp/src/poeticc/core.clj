@@ -98,17 +98,13 @@
 	      analytics]
 	     
 	     (main-list)))
-  (GET #"/poet/([A-Za-z0-9.,% ]+).html" []
-       (poet-list ((:route-params request) 0)))
+  (GET "/poet/:name.html" [name]
+       (poet-list name))
 
-  (GET "/poem/:id.html" []
+  (GET "/poem/:id.html" [id]
        (with-db db
-		(let [doc (get-document (params :id))]
+		(let [doc (get-document id)]
 		  (html [:div {:title (-> doc :title)}
 			 [:div {:id "poem"} (str (-> doc :body_html))]
 			 [:div {:id "author"} (str (-> doc :author))]]))))
   (route/files "/" {:root "public"}))
-
-(run-server {:port 3000}
-	    "/*" (servlet app))
-
