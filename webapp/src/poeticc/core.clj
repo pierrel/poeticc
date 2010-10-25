@@ -2,7 +2,9 @@
   (:use compojure.core)
   (:use hiccup.core)
   (:use com.ashafa.clutch)
-  (:require [org.danlarkin.json :as json]))
+  (:use ring.adapter.jetty)
+  (:require [org.danlarkin.json :as json])
+  (require [compojure.route :as route]))
 
 ;; set up db definition
 (def info (json/decode-from-str (slurp "../config.json")))
@@ -38,8 +40,8 @@
   "converts the rows into and html list
    inside-list-fn takes a row and converts it into whatever element should be inside the list element"
   [inside-list-fn rows]
-  (reduce html (map (fn [row]
-		      [:li (inside-list-fn row)]) rows)))
+  (html (map (fn [row]
+	       [:li (inside-list-fn row)]) rows)))
 
 (defn html-list-part
   "converts the rows into a partition of a list "
@@ -54,13 +56,13 @@
 		(let [rows ((get-view "couch" :poets {:group true
 						      :group_level 1}) :rows)]
 		  (html [:ul {:id "home" :title "Poeticc" :selected "true"}
-			 (reduce html (map (fn [rows-part] 
-					     (if (not-empty rows-part)
-					       (html-list-part (fn [row] [:a 
-									  {:href (str "/poet/" (row :key) ".html")}
-									  (str (row :key) " (" (row :value) ")")])
-							       rows-part
-							       (str (first ((first rows-part) :key)))))) (alpha-split rows :key)))]))))
+			 (html (map (fn [rows-part] 
+				      (if (not-empty rows-part)
+					(html-list-part (fn [row] [:a 
+								   {:href (str "/poet/" (row :key) ".html")}
+								   (str (row :key) " (" (row :value) ")")])
+							rows-part
+							(str (first ((first rows-part) :key)))))) (alpha-split rows :key)))]))))
 
 (defn poet-list
   "Generates the list of works for the poet with name poet-name"
@@ -78,8 +80,8 @@
 ;; my routes
 (defroutes app
   ;; so that files within the "public" folder can be accessed
-  (GET "/*" [] 
-    (or (serve-file (params :*)) :next))
+  ;; (GET "/*" [] 
+  ;;   (or (serve-file (params :*)) :next))
 
   (GET "/"
        (html [:head 
@@ -104,7 +106,8 @@
 		(let [doc (get-document (params :id))]
 		  (html [:div {:title (-> doc :title)}
 			 [:div {:id "poem"} (str (-> doc :body_html))]
-			 [:div {:id "author"} (str (-> doc :author))]])))))
+			 [:div {:id "author"} (str (-> doc :author))]]))))
+  (route/files "/" {:root "public"}))
 
 (run-server {:port 3000}
 	    "/*" (servlet app))
