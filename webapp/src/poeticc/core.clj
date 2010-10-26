@@ -87,7 +87,7 @@
 	      analytics]
 	     
 	     (main-list)))
-  (GET "/poet/:name.html" [name]
+  (GET ["/poet/:name.html" :name #"[A-Za-z0-9.,% ]+"] [name]
        (poet-list name))
 
   (GET "/poem/:id.html" [id]
