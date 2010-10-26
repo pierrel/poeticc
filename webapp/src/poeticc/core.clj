@@ -11,17 +11,6 @@
 (def db
      (info :couch))
 
-;; simple custom view rendering
-(defn layout-body
-  "renders the google analytics tag if in prod"
-  [ & rest]
-  (if (-> (json/decode-from-str (slurp "../config.json")) :prod)
-    (html ,rest)
-    (str "<body>"
-	 (html ,rest)
-	 (slurp "templates/analytics.html")
-	 "</body>")))
-
 (def analytics
      (if (not (info :prod))
        (slurp "templates/analytics.html")))
