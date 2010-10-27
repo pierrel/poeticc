@@ -4,6 +4,7 @@
   [[org.clojure/clojure "1.2.0"]
    [org.clojure/clojure-contrib "1.2.0"]
    [ring/ring-core "0.3.2"]
+   [ring/ring-devel "0.2.5"]
    [ring/ring-jetty-adapter "0.3.2"]
    [compojure "0.5.2"]
    [hiccup "0.2.7"]

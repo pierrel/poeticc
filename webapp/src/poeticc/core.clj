@@ -3,6 +3,8 @@
   (:use hiccup.core)
   (:use com.ashafa.clutch)
   (:use ring.adapter.jetty)
+  (:use ring.middleware.reload)
+  (:use ring.middleware.stacktrace)
   (:require [org.danlarkin.json :as json])
   (require [compojure.route :as route]))
 
@@ -67,7 +69,7 @@
 				     rows)]))))
 
 ;; my routes
-(defroutes app
+(defroutes handler
   (GET "/" []
        (html [:head 
 	      [:meta {:name "viewport" :content "width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"}]
@@ -93,3 +95,8 @@
 			 [:div {:id "poem"} (str (-> doc :body_html))]
 			 [:div {:id "author"} (str (-> doc :author))]]))))
   (route/files "/" {:root "public"}))
+
+(def app
+     (-> #'handler
+	 (wrap-reload '[poeticc.core])
+	 (wrap-stacktrace)))
