@@ -44,8 +44,7 @@
   "Generates the list of all poets, separated by first letter of their last name, with the count of works in parens"
   []
   (with-db db
-		(let [rows ((get-view "couch" :poets {:group true
-						      :group_level 1}) :rows)]
+		(let [rows ((get-view "couch" :poets {:group true}) :rows)]
 		  (html [:ul {:id "home" :title "Poeticc" :selected "true"}
 			 (html (map (fn [rows-part] 
 				      (if (not-empty rows-part)
@@ -59,14 +58,14 @@
   "Generates the list of works for the poet with name poet-name"
   [poet-name]
   (with-db db
-	   (let [rows (-> (get-view "couch" :poets {:key (.replace poet-name " " "%20")
-						    :reduce false}) :rows)]
-	     (html [:ul {:id "artist" :title poet-name} 
-		    (html-list-items (fn [row] 
-				       [:a 
-					{:href (str "/poem/" (-> row :id) ".html")} 
-					(str (-> row :value))])
-				     rows)]))))
+    (let [rows (-> (get-view "couch" :poets {:key poet-name
+					     :reduce false}) :rows)]
+      (html [:ul {:id "artist" :title poet-name} 
+	     (html-list-items (fn [row] 
+				[:a 
+				 {:href (str "/poem/" (-> row :id) ".html")} 
+				 (str (-> row :value))])
+			      rows)]))))
 
 ;; my routes
 (defroutes handler
@@ -94,7 +93,11 @@
 		  (html [:div {:title (-> doc :title)}
 			 [:div {:id "poem"} (str (-> doc :body_html))]
 			 [:div {:id "author"} (str (-> doc :author))]]))))
-  (route/files "/" {:root "public"}))
+  (route/files "/" {:root "public"})
+
+  (GET "/all" []
+       (with-db db
+	 (html (get-view "couch" :poets {:group true})))))
 
 (def app
      (-> #'handler
