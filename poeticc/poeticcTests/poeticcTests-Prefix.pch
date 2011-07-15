@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'poeticcTests' target in the 'poeticcTests' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+#endif
