@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <LRResty/LRResty.h>
+#import "Couch.h"
 
 
 @interface AuthorsViewController : UIViewController {
-
+    Couch *couch;
 }
 
 @end
