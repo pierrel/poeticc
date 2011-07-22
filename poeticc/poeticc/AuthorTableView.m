@@ -8,6 +8,7 @@
 
 #import "AuthorTableView.h"
 #import "Couch.h"
+#include "NSDictionary_JSONExtensions.h"
 
 @implementation AuthorTableView
 
@@ -62,6 +63,14 @@
     
     [couch getView:@"poets" withParams:params withBlock:^(LRRestyResponse *r) {
         NSLog(@"%@", [r asString]);
+        NSError *theError = nil;
+        NSDictionary *authorStuff = [NSDictionary dictionaryWithJSONData:[r responseData] error:&theError];
+        if (authorStuff) {
+            authors = [[authorStuff objectForKey:@"rows"] retain];
+            [self.tableView reloadData];
+        } else {
+            NSLog(@"failed parsing with error: %@", theError);
+        }
     }];
 }
 
@@ -109,7 +118,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 0;
+    if (section == 0)
+        return [authors count];
+    else
+        return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -122,6 +134,8 @@
     }
     
     // Configure the cell...
+    NSDictionary *authorInfo = [authors objectAtIndex:indexPath.row];
+    [cell setText:[authorInfo objectForKey:@"key"]];
     
     return cell;
 }
@@ -177,6 +191,12 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      [detailViewController release];
      */
+}
+
+#pragma mark - memory mgmt
+-(void) dealloc {
+    [authors release];
+    [super dealloc];
 }
 
 @end
