@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A2511E9713D80698003B8BC6 /* AuthorTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2511E9513D80697003B8BC6 /* AuthorTableView.m */; };
+		A2511E9813D80698003B8BC6 /* AuthorTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2511E9613D80698003B8BC6 /* AuthorTableView.xib */; };
 		A271C45E13CA486B00582D40 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A271C45D13CA486B00582D40 /* UIKit.framework */; };
 		A271C46013CA486B00582D40 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A271C45F13CA486B00582D40 /* Foundation.framework */; };
 		A271C46213CA486B00582D40 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A271C46113CA486B00582D40 /* CoreGraphics.framework */; };
@@ -40,6 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A2511E9413D80697003B8BC6 /* AuthorTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthorTableView.h; sourceTree = "<group>"; };
+		A2511E9513D80697003B8BC6 /* AuthorTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthorTableView.m; sourceTree = "<group>"; };
+		A2511E9613D80698003B8BC6 /* AuthorTableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthorTableView.xib; sourceTree = "<group>"; };
 		A271C45913CA486B00582D40 /* poeticc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = poeticc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A271C45D13CA486B00582D40 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A271C45F13CA486B00582D40 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -178,6 +183,9 @@
 				A271C47313CA486B00582D40 /* AuthorsViewController.m */,
 				A271C47513CA486B00582D40 /* SecondViewController.h */,
 				A271C47613CA486B00582D40 /* SecondViewController.m */,
+				A2511E9413D80697003B8BC6 /* AuthorTableView.h */,
+				A2511E9513D80697003B8BC6 /* AuthorTableView.m */,
+				A2511E9613D80698003B8BC6 /* AuthorTableView.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -263,6 +271,7 @@
 				A271C47A13CA486B00582D40 /* AuthorsView.xib in Resources */,
 				A271C47D13CA486B00582D40 /* SecondView.xib in Resources */,
 				A286AD4713CFEE93008ADA66 /* config.plist in Resources */,
+				A2511E9813D80698003B8BC6 /* AuthorTableView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +312,7 @@
 				A271C47413CA486B00582D40 /* AuthorsViewController.m in Sources */,
 				A271C47713CA486B00582D40 /* SecondViewController.m in Sources */,
 				A27F025D13D3B20700D8BC86 /* Couch.m in Sources */,
+				A2511E9713D80698003B8BC6 /* AuthorTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

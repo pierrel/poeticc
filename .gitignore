@@ -5,3 +5,5 @@ config.json
 webapp/lib
 webapp/templates
 poeticc/poeticc/config.plist
+
+poeticc/poeticc.xcodeproj/project.xcworkspace/xcuserdata
