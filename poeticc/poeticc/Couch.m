@@ -7,6 +7,7 @@
 //
 
 #import "Couch.h"
+#include "NSDictionary_JSONExtensions.h"
 
 
 @implementation Couch
@@ -21,10 +22,25 @@
 }
 
 -(void)getView:(NSString*)view withParams:(NSDictionary*)params withBlock:(void (^)(LRRestyResponse *))block{
-    
-    [[LRResty client] get:[NSString stringWithFormat:@"%@%@/%@", [baseURL absoluteString], @"_design/couch/_view/", view]
+    NSString *formatedString = [NSString stringWithFormat:@"%@%@/%@", [baseURL absoluteString], @"_design/couch/_view", view];
+    [[LRResty client] get:formatedString
                parameters:params 
                 withBlock:block];
+}
+-(void)getView:(NSString *)view withParams:(NSDictionary *)params withSuccessBlock:(void (^)(NSDictionary *))block withErrorBlock:(void (^)(NSString *, NSString *))errorBlock {
+    NSString *formatedString = [NSString stringWithFormat:@"%@%@/%@", [baseURL absoluteString], @"_design/couch/_view", view];
+    [[LRResty client] get:formatedString
+               parameters:params 
+                withBlock:^(LRRestyResponse *r) {
+                    NSError *theError = nil;
+                    NSDictionary *returned = [NSDictionary dictionaryWithJSONData:[r responseData] error:&theError];
+                    if ([returned objectForKey:@"error"]) {
+                        errorBlock([returned objectForKey:@"error"], [returned objectForKey:@"reason"]);
+                    } else {
+                        block(returned);
+                    }
+               }
+     ];
 }
 
 @end

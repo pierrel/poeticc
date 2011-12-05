@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class Couch;
+
 @interface AuthorTableView : UITableViewController {
     NSMutableArray *authors;
+    Couch *couch;
 }
 @end

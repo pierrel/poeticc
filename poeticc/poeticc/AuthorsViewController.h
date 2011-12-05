@@ -12,7 +12,7 @@
 
 
 @interface AuthorsViewController : UIViewController {
-    Couch *couch;
+    UINavigationController *navController;
 }
 
 @end

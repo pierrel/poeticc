@@ -14,35 +14,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSPropertyListFormat format;
-    NSString *error;
-    NSString *path = [[NSBundle mainBundle] pathForResource:
-                      @"config" ofType:@"plist"];
-    
-    // Build the array from the plist  
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSDictionary *plist = (NSDictionary*)[NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&error];
-    if (!plist) {  
-        NSLog(@"Error reading plist from file '%s', error = '%s'", [path UTF8String], [error UTF8String]);  
-        [error release];  
-    }  
-    NSLog(@"%@", plist);
-    NSDictionary *db = (NSDictionary*)[plist objectForKey:@"db"];
-    
-    NSString *baseUrl = [NSString stringWithFormat:@"https://%@:%@@%@.%@/%@/",
-                         [db objectForKey:@"username"],
-                         [db objectForKey:@"password"],
-                         [db objectForKey:@"username"],
-                         [db objectForKey:@"domain"],
-                         [db objectForKey:@"name"]];
-    NSLog(@"%@", baseUrl);
-    couch = [[Couch alloc] initWithBaseURL:[NSURL URLWithString:baseUrl]];
-    NSDictionary *params = [NSDictionary dictionaryWithObject:@"true"
-                                                       forKey:@"group"];
-    
-    [couch getView:@"poets" withParams:params withBlock:^(LRRestyResponse *r) {
-        NSLog(@"%@", [r asString]);
-    }];
+    navController = [[UINavigationController alloc] initWithRootViewController:self];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -64,7 +36,8 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-
+    [navController release];
+    navController = nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
@@ -72,7 +45,7 @@
 
 - (void)dealloc
 {
-    [couch dealloc];
+    [navController release];
     [super dealloc];
 }
 

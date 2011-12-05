@@ -15,8 +15,9 @@ typedef void (^resty_block_t)(LRRestyResponse *);
     NSURL *baseURL;
 }
 
-+initWithBaseURL:(NSURL*)url;
++(id)initWithBaseURL:(NSURL*)url;
 
 -(void)getView:(NSString*)view withParams:(NSDictionary*)params withBlock:(void (^)(LRRestyResponse *))block;
+-(void)getView:(NSString*)view withParams:(NSDictionary*)params withSuccessBlock:(void (^)(NSDictionary *))block withErrorBlock:(void (^)(NSString *error, NSString *reason))errorBlock;
 
 @end

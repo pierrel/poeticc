@@ -1,23 +1,31 @@
 //
-//  AuthorTableView.m
+//  PoemTableViewController.m
 //  poeticc
 //
-//  Created by pierre larochelle on 7/21/11.
+//  Created by pierre larochelle on 8/8/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "AuthorTableView.h"
-#import "Couch.h"
 #import "PoemTableViewController.h"
+#import "Couch.h"
 #include "NSDictionary_JSONExtensions.h"
 
-@implementation AuthorTableView
+@implementation PoemTableViewController
+@synthesize couch;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        poems = [[NSMutableDictionary alloc] init];
+    }
+    return self;
+}
+
+-(id)initWithPoetNamed:(NSString*)poet {
+    self = [self initWithStyle:UITableViewStylePlain];
+    if (self) {
+        poetName = [poet retain];
     }
     return self;
 }
@@ -35,43 +43,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    NSPropertyListFormat format;
-    NSString *error;
-    NSString *path = [[NSBundle mainBundle] pathForResource:
-                      @"config" ofType:@"plist"];
-    
-    // Build the array from the plist  
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSDictionary *plist = (NSDictionary*)[NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&error];
-    if (!plist) {  
-        NSLog(@"Error reading plist from file '%s', error = '%s'", [path UTF8String], [error UTF8String]);  
-        [error release];  
-    }  
-    NSLog(@"%@", plist);
-    NSDictionary *db = (NSDictionary*)[plist objectForKey:@"db"];
-    
-    NSString *baseUrl = [NSString stringWithFormat:@"http://%@:%@@%@.%@/%@/",
-                         [db objectForKey:@"username"],
-                         [db objectForKey:@"password"],
-                         [db objectForKey:@"username"],
-                         [db objectForKey:@"domain"],
-                         [db objectForKey:@"name"]];
-    NSLog(@"%@", baseUrl);
-    couch = [[Couch alloc] initWithBaseURL:[NSURL URLWithString:baseUrl]];
-    NSDictionary *params = [NSDictionary dictionaryWithObject:@"true"
-                                                       forKey:@"group"];
-    
-    [couch getView:@"poets" withParams:params withBlock:^(LRRestyResponse *r) {
-        NSLog(@"%@", [r asString]);
-        NSError *theError = nil;
-        NSDictionary *authorStuff = [NSDictionary dictionaryWithJSONData:[r responseData] error:&theError];
-        if (authorStuff) {
-            authors = [[authorStuff objectForKey:@"rows"] retain];
-            [self.tableView reloadData];
-        } else {
-            NSLog(@"failed parsing with error: %@", theError);
-        }
+    NSDictionary *params = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[poetName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], @"false", nil] 
+                                                       forKeys:[NSArray arrayWithObjects:@"key", @"reduce", nil]];
+    [couch getView:@"poets" withParams:params withSuccessBlock:^(NSDictionary *poemDict) {
+        poems = [[poemDict objectForKey:@"rows"] retain];
+        NSLog(@"%@", poems);
+        [self.tableView reloadData];
+    } withErrorBlock:^(NSString *error, NSString *reason) {
+        NSLog(@"error: %@, reason: %@", error, reason);
     }];
 }
 
@@ -112,17 +91,16 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    if (section == 0)
-        return [authors count];
-    else
+    if (section == 0) {
+        return [poems count];
+    } else {
         return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -131,14 +109,11 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
     // Configure the cell...
-    NSDictionary *authorInfo = [authors objectAtIndex:indexPath.row];
-    [cell setText:[authorInfo objectForKey:@"key"]];
-    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-    
+    [cell setText:@"this is a cell"];
     return cell;
 }
 
@@ -185,18 +160,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *authorInfo = [authors objectAtIndex:indexPath.row];
-    PoemTableViewController *poemsController = [[PoemTableViewController alloc] initWithPoetNamed:[authorInfo objectForKey:@"key"]];
-    poemsController.couch = couch;
-    [self.navigationController pushViewController:poemsController animated:YES];
-    NSLog(@"clicked on author %@", [authorInfo objectForKey:@"key"]);
-    
-}
-
-#pragma mark - memory mgmt
--(void) dealloc {
-    [authors release];
-    [super dealloc];
+    // Navigation logic may go here. Create and push another view controller.
+    /*
+     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     // ...
+     // Pass the selected object to the new view controller.
+     [self.navigationController pushViewController:detailViewController animated:YES];
+     [detailViewController release];
+     */
 }
 
 @end
